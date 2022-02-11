@@ -88,8 +88,8 @@ async function main() {
     // Input Data
     // Use input dimension [batch_size, dimension]
 
-    const input0_data = new Uint32Array(batch_size * dimension).fill().map((element, index) => index)
-    const input1_data = new Uint32Array(batch_size * dimension).fill().map((element, index) => index)
+    const input0_data = new Array(batch_size * dimension).fill().map((element, index) => index)
+    const input1_data = new Array(batch_size * dimension).fill().map((element, index) => index)
 
     console.log(input0_data)
     console.log(input1_data)
@@ -98,18 +98,18 @@ async function main() {
         name: "INPUT0",
         datatype: "UINT32",
         shape: [dimension],
-        // contents: {
-        //     uint_contents: input0_data
-        // }
+        contents: {
+            uint_contents: input0_data
+        }
     }
 
     const input1 = {
         name: "INPUT1",
         datatype: "UINT32",
         shape: [dimension],
-        // contents: {
-        //     uint_contents: input1_data
-        // }
+        contents: {
+            uint_contents: input1_data
+        }
     }
 
     const modelInferRequest = {
@@ -119,12 +119,10 @@ async function main() {
         outputs: [
             { name: "OUTPUT0" },
             { name: "OUTPUT1" }
-        ],
-        raw_input_contents: [
-            new Uint8Array(input0_data.buffer),
-            new Uint8Array(input1_data.buffer)
         ]
     }
+
+    console.log(JSON.stringify(modelInferRequest))
 
     const outputs = await modelInfer(modelInferRequest);
 
